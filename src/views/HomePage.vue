@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import RecipeCard from '../components/RecipeCard.vue'
 import { useRecipes } from '../stores/useRecipes'
+import { useIngredients } from '../stores/useIngredients'
 import { onMounted, computed } from 'vue'
 import Modal from '@/components/RecipeModal.vue'
 import { ref } from 'vue'
 
+// Modal functions
 const modalActive = ref(false)
 const modalRecipe = ref(null)
 
@@ -12,11 +14,28 @@ const toggleModal = () => {
   modalActive.value = !modalActive.value
 }
 
-const openRecipe = (recipe) => {
+const openRecipe = recipe => {
   modalRecipe.value = recipe
+  fetchIngredients(recipe.id)
   toggleModal()
 }
 
+// Fetching of ingredients and allergenes for modal
+const ingredientsStore = useIngredients()
+const fetchIngredients = recipeId => {
+  ingredientsStore.fetchOnce(recipeId)
+}
+
+const modalIngredients = computed(function () {
+  if (
+    modalRecipe.value !== null &&
+    !ingredientsStore.isFetched(modalRecipe.value.id)
+  )
+    return null
+  return ingredientsStore.getById(modalRecipe.value.id)
+})
+
+// Recipes functions
 const recipesStore = useRecipes()
 onMounted(async () => {
   try {
@@ -34,11 +53,28 @@ const recipes = computed(function () {
 
 <template>
   <main>
-    <Modal @close="toggleModal" :modalActive="modalActive" :modalRecipe="modalRecipe"> </Modal>
+    <!-- Modal -->
+    <Modal @close="toggleModal" :modalActive="modalActive">
+      <div class="modal-content" v-if="modalRecipe !== null && modalIngredients !== null ">
+        <h1>{{ modalRecipe.name['nl-BE'] }}</h1>
+        <div v-for="(retailproduct, index) in modalIngredients.retailproducts" :key="index">
+          <p>{{ retailproduct.name['nl-BE'] }}: {{ retailproduct.content.quantity }} {{ retailproduct.content.unit }}</p>
+        </div>
+      </div>
+      <div class="modal-content" v-else>
+        <h1>Something went wrong</h1>
+      </div>
+    </Modal>
+
+    <!-- Recipes -->
     <h1>Recipes</h1>
     <div class="row">
       <div v-for="(recipe, index) in recipes" :key="index" class="column">
-        <recipe-card @click="openRecipe(recipe)" class="card" :recipe="recipe"></recipe-card>
+        <recipe-card
+          @click="openRecipe(recipe)"
+          class="card"
+          :recipe="recipe"
+        ></recipe-card>
       </div>
     </div>
   </main>

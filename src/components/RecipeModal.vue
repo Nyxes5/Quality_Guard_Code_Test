@@ -3,13 +3,6 @@
     <div v-show="modalActive" class="modal">
       <div v-show="modalActive" class="modal-inner">
         <i @click="close" class="far fa-times-circle"></i>
-        <div class="modal-content" v-if="modalRecipe !== null">
-          <h1>{{ modalRecipe.name['nl-BE'] }}</h1>
-          <p>This is a modal message</p>
-        </div>
-        <div class="modal-content" v-else>
-          <h1>Something went wrong</h1>
-        </div>
         <slot />
         <button @click="close" type="button">Close</button>
       </div>
@@ -22,10 +15,7 @@ defineProps({
   modalActive: {
     type: Boolean,
     required: true,
-  },
-  modalRecipe: {
-    type: Object,
-  },
+  }
 })
 
 const emit = defineEmits(['close'])
