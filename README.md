@@ -1,7 +1,7 @@
 # vue-project
 
 ## CORS Errors
-Since CORS was annoying, I temporarly served my own jsons I got from prompting the backend. For this reason, getting the ingredients only works for the first 2 recipes
+Since CORS was annoying, I temporarly served my own jsons I got from prompting the backend. For this reason, getting the ingredients only works for the first 2 recipes. Allergens haven't been implemented yet into the API so also not in this project.
 ```sh
 npx json-server temp_db/db.json
 ```
