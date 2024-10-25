@@ -12,9 +12,8 @@ export const useRecipes = defineStore('recipes', {
     },
     async fetch() {
       await api
-        .get('/RecipeInfo/contracts/21/recipes')
+        .get('recipes')
         .then(response => {
-          console.log(response)
           this.items = response.data
         })
         .catch(error => {
