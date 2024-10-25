@@ -1,6 +1,10 @@
 # vue-project
 
-This template should help get you started developing with Vue 3 in Vite.
+## CORS Errors
+Since CORS was annoying, I temporarly served my own jsons I got from prompting the backend. For this reason, getting the ingredients only works for the first 2 recipes
+```sh
+npx json-server temp_db/db.json
+```
 
 ## Recommended IDE Setup
 

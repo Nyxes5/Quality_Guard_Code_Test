@@ -12,6 +12,7 @@ export const useRecipes = defineStore('recipes', {
     },
     async fetch() {
       await api
+        // .get('RecipeInfo/contracts/21/recipes') // Contract 21 is hardcoded at the moment
         .get('recipes')// TODO: Temporary since problems with CORS
         .then(response => {
           this.items = response.data
